@@ -145,6 +145,16 @@
   margin-left: 0.4rem;
   font-variant-numeric: tabular-nums;
 }
+.loader__slow {
+  margin-top: 1.2rem;
+  max-width: 34ch;
+  margin-inline: auto;
+  font-size: 0.82rem;
+  color: var(--walnut);
+}
+.loader__slow a {
+  color: var(--gold-text);
+}
 .loader__skip {
   margin-top: 2.2rem;
   display: grid;
@@ -1641,4 +1651,35 @@ kbd {
 .villa[data-capture] ~ * .hotspot,
 body:has(.villa[data-capture]) .hotspot {
   display: none !important;
+}
+
+/* shown when the 3D engine failed and the gallery took over */
+.fallback-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem 1.4rem;
+  padding: 0.9rem clamp(16px, 4vw, 40px);
+  background: var(--linen);
+  border-bottom: 1px solid var(--gold-hair);
+  font-size: 0.88rem;
+}
+.fallback-note__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+.fallback-note summary {
+  cursor: pointer;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+.fallback-note code {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  max-width: 60ch;
+  word-break: break-word;
 }

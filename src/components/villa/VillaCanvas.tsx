@@ -144,6 +144,8 @@ export default function VillaCanvas({ quality, onLost }: { quality: Quality; onL
         const { gl } = state;
         if (process.env.NODE_ENV !== "production") (window as unknown as { __r3f: unknown }).__r3f = state;
         gl.toneMapping = THREE.NeutralToneMapping;
+        // warm stone, not black, behind the scene while it streams in
+        gl.setClearColor("#e9dfcc");
         gl.toneMappingExposure = 1;
         gl.domElement.addEventListener("webglcontextlost", (e) => {
           e.preventDefault();

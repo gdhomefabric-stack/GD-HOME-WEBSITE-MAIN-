@@ -80,6 +80,8 @@ interface VillaState {
   announcement: string;
   lowFps: boolean;
   loadProgress: number;
+  /** why the 3D experience gave way to the room gallery, if it did */
+  fallbackReason: string | null;
 
   goOverview: () => void;
   enterRoom: (id: RoomId) => void;
@@ -109,6 +111,7 @@ interface VillaState {
   setFlying: (f: boolean) => void;
   setLowFps: (v: boolean) => void;
   setLoadProgress: (v: number) => void;
+  fallBack: (reason: string) => void;
   announce: (msg: string) => void;
 }
 
@@ -137,6 +140,7 @@ export const useVilla = create<VillaState>()((set, get) => ({
   announcement: "",
   lowFps: false,
   loadProgress: 0,
+  fallbackReason: null,
 
   goOverview: () => {
     set({ mode: "overview", roomId: null, windowId: null, panel: "curtains" });
@@ -224,6 +228,8 @@ export const useVilla = create<VillaState>()((set, get) => ({
   setFlying: (f) => set({ flying: f }),
   setLowFps: (v) => set({ lowFps: v }),
   setLoadProgress: (v) => set((s) => (v > s.loadProgress ? { loadProgress: v } : s)),
+  fallBack: (reason) =>
+    set({ quality: "static", fallbackReason: reason, mode: "overview", roomId: null, windowId: null, flying: false }),
   announce: (msg) => set({ announcement: msg }),
 }));
 

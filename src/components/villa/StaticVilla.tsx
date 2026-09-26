@@ -25,12 +25,30 @@ export function StaticVilla({ canUse3D }: { canUse3D: boolean }) {
   const cfg = useVilla((s) => (s.windowId ? s.curtains[s.windowId] : null));
   const open = useVilla((s) => (s.windowId ? s.open[s.windowId] : 1));
   const pillows = useVilla((s) => (s.roomId ? s.pillows[s.roomId] : undefined));
+  const fallbackReason = useVilla((s) => s.fallbackReason);
   const s = useVilla.getState();
   const room = roomId ? ROOM_BY_ID[roomId] : null;
 
   return (
     <main id="villa-main" className="gallery page">
       <LiveRegion />
+      {fallbackReason && (
+        <div className="fallback-note" role="status">
+          <p>
+            <strong>The 3D villa couldn&apos;t start on this device</strong>, so you&apos;re seeing the room gallery —
+            every room, fabric and pillow is still here.
+          </p>
+          <div className="fallback-note__actions">
+            <a className="btn btn--sm btn--outline" href="/?mode=lite">
+              Try 3D again
+            </a>
+            <details>
+              <summary>Technical detail</summary>
+              <code>{fallbackReason}</code>
+            </details>
+          </div>
+        </div>
+      )}
       {!room ? (
         <>
           <section className="gallery__hero">
