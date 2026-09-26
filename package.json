@@ -1,0 +1,48 @@
+{
+  "name": "gd-home-fabric",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GD Home Fabric — interactive 3D villa showroom for curtains and goose feather pillows.",
+  "scripts": {
+    "predev": "node scripts/copy-basis.mjs",
+    "dev": "next dev",
+    "prebuild": "node scripts/copy-basis.mjs",
+    "build": "next build",
+    "start": "npx serve@14 out -l 3000",
+    "typecheck": "tsc --noEmit",
+    "assets": "npm run assets:textures && npm run assets:villa",
+    "assets:textures": "tsx scripts/build-textures.ts",
+    "assets:villa": "tsx scripts/build-villa.ts",
+    "assets:renders": "node scripts/capture-renders.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.1",
+    "@react-three/postprocessing": "^3.1.2",
+    "next": "16.3.6",
+    "postprocessing": "^6.39.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "three": "0.186.1",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@gltf-transform/core": "4.5.0",
+    "@gltf-transform/extensions": "4.5.0",
+    "@gltf-transform/functions": "4.5.0",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "0.186.0",
+    "ktx2-encoder": "^0.6.0",
+    "meshoptimizer": "1.3.0",
+    "playwright": "1.56",
+    "sharp": "0.35.4",
+    "tsx": "4.23.15",
+    "typescript": "~5.9.3"
+  }
+}
