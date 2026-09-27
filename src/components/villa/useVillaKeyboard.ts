@@ -12,7 +12,12 @@ export function useVillaKeyboard(onHelp: () => void) {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const t = e.target as HTMLElement | null;
       const tag = t?.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || t?.isContentEditable) return;
+      // text entry keeps every key; option controls (radios, sliders) keep their own
+      // arrow keys but still allow the letter shortcuts
+      const input = tag === "INPUT" ? (t as HTMLInputElement) : null;
+      const typing = !!input && !["radio", "checkbox", "range", "button", "submit"].includes(input.type);
+      if (typing || tag === "TEXTAREA" || tag === "SELECT" || t?.isContentEditable) return;
+      if (input && e.key.startsWith("Arrow")) return;
       if (document.querySelector("dialog[open]")) return;
       const s = useVilla.getState();
       if (!s.introDone) return;

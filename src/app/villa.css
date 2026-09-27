@@ -195,6 +195,14 @@
 .vui__top > * {
   pointer-events: auto;
 }
+/* keep the lighting switch clear of the customiser panel on wide screens */
+@media (min-width: 761px) {
+  .vui[data-mode="window"] .vui__top,
+  .vui[data-mode="closeup"] .vui__top,
+  .vui[data-mode="bed"] .vui__top {
+    right: calc(min(400px, 36vw) + clamp(12px, 2vw, 24px) + 16px);
+  }
+}
 .vui__corner {
   position: absolute;
   left: clamp(12px, 2.4vw, 32px);

@@ -61,11 +61,18 @@ const OVERVIEW_AZIMUTH = Math.atan2(
   OVERVIEW_VIEW.position[2] - OVERVIEW_VIEW.target[2],
 );
 
-/** Gentle, bounded orbit for each step so the visitor can look around but never gets lost. */
+const _end = new THREE.Spherical();
+
+/**
+ * Gentle, bounded orbit for each step so the visitor can look around but never gets lost.
+ * Limits are centred on where the camera is heading, so applying them before the
+ * last few centimetres of a flight never cuts it short.
+ */
 function applyLimits(c: CameraControlsImpl, mode: Mode) {
-  const az = c.azimuthAngle;
-  const pol = c.polarAngle;
-  const d = c.distance;
+  const end = c.getSpherical(_end, true);
+  const az = end.theta;
+  const pol = end.phi;
+  const d = end.radius;
   const set = (azMin: number, azMax: number, pMin: number, pMax: number, dMin: number, dMax: number) => {
     c.minAzimuthAngle = azMin;
     c.maxAzimuthAngle = azMax;
@@ -146,17 +153,24 @@ export function CameraRig() {
     c.smoothTime = first ? 1.25 : 0.62;
     const p = c.setLookAt(pos[0], pos[1], pos[2], v.target[0], v.target[1], v.target[2], !reduced);
     invalidate();
-    p.then(() => {
-      if (cancelled) return;
+    let finished = false;
+    const finish = () => {
+      if (cancelled || finished) return;
+      finished = true;
       applyLimits(c, mode);
       c.smoothTime = 0.3;
       c.enabled = true;
       useVilla.getState().setFlying(false);
       if (first) useVilla.getState().setIntroDone();
       invalidate();
-    });
+    };
+    // The damping tail runs on long after the camera looks still; hand control back
+    // (and show the panels) once the flight has visibly settled, or at rest if sooner.
+    void p.then(finish);
+    const settle = setTimeout(finish, reduced ? 0 : c.smoothTime * 2600);
     return () => {
       cancelled = true;
+      clearTimeout(settle);
     };
   }, [mode, roomId, windowId, sceneReady, portrait, invalidate]);
 
