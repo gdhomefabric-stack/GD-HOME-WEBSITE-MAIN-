@@ -111,8 +111,10 @@ function CaptureAfterComposer() {
 function FrameBudget({ quality }: { quality: Quality }) {
   const setDpr = useThree((s) => s.setDpr);
   const stats = useRef({ n: 0, sum: 0, step: 0 });
+  // automated browsers (render capture, tests) run on software GL: never degrade them
+  const automated = typeof navigator !== "undefined" && navigator.webdriver;
   useFrame((_, dt) => {
-    if (dt > 0.25 || !useVilla.getState().introDone) return;
+    if (automated || dt > 0.25 || !useVilla.getState().introDone) return;
     const s = stats.current;
     s.n++;
     s.sum += dt;
