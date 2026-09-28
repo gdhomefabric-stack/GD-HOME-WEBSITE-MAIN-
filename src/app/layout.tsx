@@ -7,6 +7,7 @@ import "@fontsource-variable/inter/index.css";
 import "./globals.css";
 import "./villa.css";
 import "./shop.css";
+import "./print.css";
 import { ShopHydrator } from "@/components/site/ShopHydrator";
 
 export const metadata: Metadata = {

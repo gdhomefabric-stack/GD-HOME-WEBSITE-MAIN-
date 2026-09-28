@@ -21,6 +21,7 @@ export function SiteFooter() {
           <Link href="/">The Villa in 3D</Link>
           <Link href="/?mode=gallery">Room gallery</Link>
           <Link href="/collections/">Collections</Link>
+          <Link href="/custom-pillows/">Custom print pillows</Link>
         </div>
         <div>
           <h4>The Maison</h4>

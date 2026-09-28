@@ -175,6 +175,12 @@ export function CollectionsBrowser() {
             </button>
           </div>
         </div>
+        <Link href="/custom-pillows/" className="print-promo">
+          <span className="eyebrow">New · The print studio</span>
+          <strong className="serif">Custom print pillows, in any shape</strong>
+          <span className="muted">Hearts, stars, clouds, your initial… with your photos, words, our patterns or AI-painted designs.</span>
+          <span className="link-arrow">Design yours</span>
+        </Link>
       </section>
 
       {studio && <CurtainStudio productId={studio} onClose={() => setStudio(null)} />}

@@ -3,12 +3,13 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { CurtainConfig, PillowConfig, PlacedPillow } from "@/data/catalog";
+import { bulkDiscount, type PrintSpec } from "@/data/printPillows";
 import type { Lighting } from "./villa";
 import { uid } from "./villa";
 
 export interface CartItem {
   uid: string;
-  kind: "curtain" | "pillow";
+  kind: "curtain" | "pillow" | "print";
   title: string;
   subtitle: string;
   details: Record<string, string>;
@@ -17,6 +18,10 @@ export interface CartItem {
   image?: string;
   curtain?: CurtainConfig;
   pillow?: PillowConfig;
+  /** custom print pillows: the saved design's reference (the artwork lives in IndexedDB) */
+  print?: { ref: string; spec: PrintSpec };
+  /** list price before the bulk discount, which follows the quantity */
+  basePrice?: number;
 }
 
 export interface SavedLook {
@@ -89,7 +94,14 @@ export const useShop = create<ShopState>()(
           return { cart: [...s.cart, { ...item, qty: item.qty ?? 1, uid: uid("line") }] };
         }),
       setQty: (id, qty) =>
-        set((s) => ({ cart: s.cart.map((c) => (c.uid === id ? { ...c, qty: Math.max(1, Math.min(99, qty)) } : c)) })),
+        set((s) => ({
+          cart: s.cart.map((c) => {
+            if (c.uid !== id) return c;
+            const q = Math.max(1, Math.min(c.kind === "print" ? 500 : 99, qty));
+            const unitPrice = c.basePrice ? Math.round(c.basePrice * (1 - bulkDiscount(q))) : c.unitPrice;
+            return { ...c, qty: q, unitPrice };
+          }),
+        })),
       removeFromCart: (id) => set((s) => ({ cart: s.cart.filter((c) => c.uid !== id) })),
       clearCart: () => set({ cart: [] }),
       saveLook: (look) =>

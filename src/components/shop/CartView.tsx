@@ -23,6 +23,36 @@ function Thumb({ item }: { item: CartItem }) {
   return <span className="line__img line__img--pillow" aria-hidden="true" />;
 }
 
+/** Custom print lines: reopen the design, or download its print file. */
+function PrintLineActions({ designRef }: { designRef: string }) {
+  const [busy, setBusy] = useState(false);
+  const download = async () => {
+    setBusy(true);
+    try {
+      const [{ loadDesign }, { renderPrintFile, downloadCanvas }] = await Promise.all([import("@/lib/print/storage"), import("@/lib/print/render")]);
+      const d = await loadDesign(designRef);
+      if (!d) {
+        window.alert("This design isn't stored in this browser any more. Open the studio to recreate it.");
+        return;
+      }
+      await downloadCanvas(await renderPrintFile(d, "front"), `${designRef}-front-print.png`);
+      if (d.spec.back === "custom") await downloadCanvas(await renderPrintFile(d, "back"), `${designRef}-back-print.png`);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <p className="line__actions">
+      <Link href={`/custom-pillows/?ref=${encodeURIComponent(designRef)}`} className="link-btn">
+        Edit design
+      </Link>
+      <button type="button" className="link-btn" onClick={() => void download()} disabled={busy}>
+        {busy ? "Preparing…" : "Download print file"}
+      </button>
+    </p>
+  );
+}
+
 const itemLines = (cart: CartItem[]) =>
   cart
     .map(
@@ -55,6 +85,9 @@ export function CartView() {
       itemLines(cart),
       "",
       `Notes: ${f.get("notes") || "—"}`,
+      ...(cart.some((c) => c.kind === "print")
+        ? ["", "Custom print pillows: I will attach the print files (Download print file in the cart) to this email."]
+        : []),
     ].join("\n");
     window.location.href = buildMailto(`Quote request — ${f.get("name")}`, body);
     setSent(true);
@@ -88,6 +121,7 @@ export function CartView() {
                   <div className="line__body">
                     <h2 className="line__title">{item.title}</h2>
                     <p className="line__sub">{item.subtitle}</p>
+                    {item.print && <PrintLineActions designRef={item.print.ref} />}
                     <dl className="line__details">
                       {Object.entries(item.details).map(([k, v]) => (
                         <div key={k}>
@@ -105,7 +139,7 @@ export function CartView() {
                       <input
                         type="number"
                         min={1}
-                        max={99}
+                        max={item.kind === "print" ? 500 : 99}
                         value={item.qty}
                         onChange={(e) => shop.setQty(item.uid, Number(e.target.value) || 1)}
                         aria-label="Quantity"

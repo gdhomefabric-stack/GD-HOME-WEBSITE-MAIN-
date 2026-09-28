@@ -26,6 +26,9 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         <Link href="/collections/" aria-current={current("/collections/")}>
           Collections
         </Link>
+        <Link href="/custom-pillows/" aria-current={current("/custom-pillows/")}>
+          <span className="nav-hide-xs">Custom </span>Print
+        </Link>
         <Link href="/cart/#saved" aria-label={`Saved looks, ${saved}`} className="nav-hide-sm">
           Saved{saved > 0 && <span className="nav-count">{saved}</span>}
         </Link>

@@ -26,6 +26,12 @@ goose feather pillows. It is built with Next.js (static export), React Three Fib
 - **Compare.** Renders the same window with velvet, blackout, linen and embroidered curtains drawn, side by side.
 - **Goose Feather Pillows.** In the bedrooms, choose size, fill, support and cover, then add pillows to the bed. They settle into a hotel-style arrangement: Euro squares at the back, sleeping pillows, then a boudoir cushion in front.
 - **Save, cart, quote.** Looks are saved with a snapshot. The cart and saved looks persist in the browser. Quote and consultation requests open the visitor's email app, addressed to `sales@gdhomefabric.in` with the full selection.
+- **Custom Print Pillow Studio** (`/custom-pillows/`). Customers design their own printed pillow in four steps (shape & size → design → fabric & finish → review & order):
+  - 11 shapes: square, lumbar, round, heart, star, cloud, hexagon, crescent moon, arch, flower, and any letter or number, in several sizes, priced live.
+  - Designs are built from templates (photo pillow, pet portrait, monogram, family name, wedding, quote, kid's name, festive), an **AI image generator** (patterns or artwork, in 13 styles including Indian block print and Madhubani, 4 variations at a time), 17 built-in pattern generators with editable palettes (these work offline and print crisp at any size), uploaded photos, and text (9 fonts, curved text, outlines, shadows).
+  - Drag, resize and rotate anything on the preview; undo and redo; the front and back can be designed separately. Warns about low-resolution photos.
+  - Previews: the sewn and filled pillow (satin sheen, velvet, linen and canvas textures; piping, flange, pom-poms or tassels), the flat print file with cutting line and safe area, and the pillow to scale on a sofa.
+  - Exports a print-ready PNG with bleed (150 dpi) and a one-page proof sheet. Designs are kept in the browser's IndexedDB; cart lines can reopen or download their design.
 - **Skip 3D.** "Skip 3D · Browse collections" is always visible, and the collections page is a normal catalogue with a 2D fabric studio.
 
 ### Devices, performance and accessibility
@@ -49,6 +55,9 @@ src/data/lighting.ts     Day / Sunset / Night presets
 src/store/               zustand stores — experience state, and the persisted cart + saved looks
 src/components/villa/    VillaExperience (tiering, UI), VillaCanvas (R3F), scene/*, ui/*, StaticVilla (gallery)
 src/components/shop/     collections browser + studio, cart & quote, consultation
+src/components/print/    the Custom Print Pillow Studio (stage, steps, AI tab)
+src/data/printPillows.ts print pillow shapes, sizes, fabrics, finishes and prices
+src/lib/print/           print studio engine: shapes, patterns, renderer & print export, AI client, storage
 scripts/                 asset pipeline (below)
 public/models/villa.glb  the villa (generated)
 public/textures/fabric/  curtain fabrics as KTX2 + close-up WebPs (generated)
@@ -87,4 +96,6 @@ npm run assets:renders -- http://localhost:3000   # re-render public/renders/* f
 - **Prices:** `pricePerSqft` per product and `CURRENCY` in `src/data/catalog.ts`. Prices are made-to-measure estimates for a pair.
 - **Colours / new products:** add them to `PRODUCTS` in `src/data/catalog.ts`. A new product that reuses one of the five fabric looks needs no new textures.
 - **Room recommendations:** `ROOM_DEFAULTS` and `DEFAULT_PILLOWS` in `src/data/catalog.ts`.
+- **Print pillows:** shapes, sizes, fabrics, trims and prices are in `src/data/printPillows.ts`; templates in `src/lib/print/templates.ts`; AI styles and idea prompts in `src/lib/print/ai.ts`.
+- **AI image service:** the site is static, so the generator calls [Pollinations](https://pollinations.ai) straight from the browser (free, no key). To use another service, set `NEXT_PUBLIC_AI_IMAGE_URL` at build time to a URL template with `{prompt}`, `{width}`, `{height}`, `{seed}` (and optionally `{key}`, filled from `NEXT_PUBLIC_AI_IMAGE_KEY` — use only a publishable key, since it ships to the browser). The built-in pattern generator always works, even if the AI service is down.
 - **Enquiries:** the site is static, so forms compose an email. To receive submissions directly, point `src/components/shop/mailto.ts` at a form service.
