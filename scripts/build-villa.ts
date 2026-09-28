@@ -784,7 +784,7 @@ function master() {
   armchair(new Placer(g, 3.15, -1.95, PI + 0.3), "boucle", "walnut");
   const st = new Placer(g, 2.25, -1.8);
   sideTable(st, 0.5);
-  plant(new Placer(g, 5.55, -1.55), 0.24, 0.48, 0.5, 1.3, "ceramic_white", 17);
+  plant(new Placer(g, -1.5, -6.45), 0.24, 0.48, 0.5, 1.3, "ceramic_white", 17);
 }
 
 function suite() {

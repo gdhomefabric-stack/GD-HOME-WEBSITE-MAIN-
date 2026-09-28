@@ -111,8 +111,10 @@ function CaptureAfterComposer() {
 function FrameBudget({ quality }: { quality: Quality }) {
   const setDpr = useThree((s) => s.setDpr);
   const stats = useRef({ n: 0, sum: 0, step: 0 });
+  // automated browsers (render capture, tests) run on software GL: never degrade them
+  const automated = typeof navigator !== "undefined" && navigator.webdriver;
   useFrame((_, dt) => {
-    if (dt > 0.25 || !useVilla.getState().introDone) return;
+    if (automated || dt > 0.25 || !useVilla.getState().introDone) return;
     const s = stats.current;
     s.n++;
     s.sum += dt;
@@ -144,6 +146,8 @@ export default function VillaCanvas({ quality, onLost }: { quality: Quality; onL
         const { gl } = state;
         if (process.env.NODE_ENV !== "production") (window as unknown as { __r3f: unknown }).__r3f = state;
         gl.toneMapping = THREE.NeutralToneMapping;
+        // warm stone, not black, behind the scene while it streams in
+        gl.setClearColor("#e9dfcc");
         gl.toneMappingExposure = 1;
         gl.domElement.addEventListener("webglcontextlost", (e) => {
           e.preventDefault();

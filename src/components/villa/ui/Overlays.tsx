@@ -17,6 +17,11 @@ export function LoadingScreen() {
   const progress = useVilla((s) => s.loadProgress);
   const [gone, setGone] = useState(false);
   const [shown, setShown] = useState(0);
+  const [slow, setSlow] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setSlow(true), 40000);
+    return () => clearTimeout(t);
+  }, []);
   // ease the counter so it never jumps backwards when new files join the queue
   useEffect(() => {
     // the 3D engine itself streams in first, so creep up while it arrives
@@ -52,6 +57,14 @@ export function LoadingScreen() {
           {ready ? "Welcome in" : `${stage}…`} <span className="loader__pct">{pct}%</span>
         </p>
         <span className="sr-only">{ready ? "The villa has loaded." : `Loading the 3D villa, ${pct} percent.`}</span>
+        {slow && !ready && (
+          <p className="loader__slow">
+            This is taking longer than usual on this connection or device.{" "}
+            <Link href="/?mode=gallery" onClick={() => useVilla.getState().fallBack("Loading took longer than 40 seconds")}>
+              Open the room gallery instead
+            </Link>
+          </p>
+        )}
         <div className="loader__skip">
           <Link href="/collections/" className="link-arrow">
             Skip 3D — browse collections

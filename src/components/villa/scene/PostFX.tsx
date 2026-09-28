@@ -13,6 +13,8 @@ import { ToneMappingMode } from "postprocessing";
  */
 export function PostFX() {
   const gl = useThree((s) => s.gl);
+  // half-float targets need a float-renderable colour buffer; fall back to 8-bit otherwise
+  const halfFloat = gl.extensions.has("EXT_color_buffer_float") || gl.extensions.has("EXT_color_buffer_half_float");
   useEffect(() => {
     const prev = gl.toneMapping;
     gl.toneMapping = THREE.NoToneMapping;
@@ -21,7 +23,7 @@ export function PostFX() {
     };
   }, [gl]);
   return (
-    <EffectComposer multisampling={0} frameBufferType={THREE.HalfFloatType}>
+    <EffectComposer multisampling={0} frameBufferType={halfFloat ? THREE.HalfFloatType : THREE.UnsignedByteType}>
       <N8AO halfRes quality="medium" aoRadius={0.9} distanceFalloff={0.55} intensity={2.4} color="#20150c" />
       <Bloom mipmapBlur intensity={0.32} luminanceThreshold={0.92} luminanceSmoothing={0.25} />
       <ToneMapping mode={ToneMappingMode.NEUTRAL} />

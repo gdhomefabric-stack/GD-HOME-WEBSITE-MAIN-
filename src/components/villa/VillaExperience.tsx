@@ -9,6 +9,7 @@ import { detectQuality, readDevice } from "@/lib/device";
 import { useVilla, type Lighting, type Quality } from "@/store/villa";
 import { SiteHeader } from "../site/SiteHeader";
 import { StaticVilla } from "./StaticVilla";
+import { VillaBoundary } from "./VillaBoundary";
 import { Customizer } from "./ui/Customizer";
 import { Journey, LightingToggle, Minimap, OverviewIntro, RoomCards, RoomPanel } from "./ui/Navigation";
 import { CompareDialog, HelpDialog, LiveRegion, LoadingScreen, LowFpsNotice, Toasts } from "./ui/Overlays";
@@ -129,7 +130,11 @@ export function VillaExperience() {
           the keyboard; press question mark for the controls.
         </p>
         <div className="villa__poster" style={{ backgroundImage: `url(${ASSETS.render("overview")})` }} aria-hidden="true" />
-        {quality && <VillaCanvas quality={quality} onLost={() => useVilla.getState().setQuality("static")} />}
+        {quality && (
+          <VillaBoundary onFail={(reason) => useVilla.getState().fallBack(reason)}>
+            <VillaCanvas quality={quality} onLost={() => useVilla.getState().fallBack("The graphics context was lost")} />
+          </VillaBoundary>
+        )}
       </main>
       <LiveRegion />
       {quality && <VillaUI />}
