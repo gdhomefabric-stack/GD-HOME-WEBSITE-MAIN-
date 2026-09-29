@@ -17,6 +17,8 @@
   --gold: #b08a54;
   --gold-soft: #d9c3a0;
   --gold-text: #7c5b28;
+  /* large gold numerals on paper (3:1 and up) */
+  --gold-num: #96723e;
   --clay: #b9785a;
 
   /* legacy names used across the app, mapped onto the new palette */

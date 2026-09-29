@@ -443,6 +443,9 @@
   font-family: var(--serif);
   font-size: 2.4rem;
   line-height: 1;
+  color: var(--gold-num);
+}
+.section--dark .steps-list__n {
   color: var(--gold);
 }
 .steps-list h3 {
@@ -940,7 +943,7 @@ html.menu-open {
   font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 300;
   line-height: 1;
-  color: var(--gold);
+  color: var(--gold-num);
 }
 .diagram {
   width: 100%;

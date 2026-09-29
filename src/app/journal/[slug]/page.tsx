@@ -44,8 +44,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div
             data-reveal="curtain"
             style={{ aspectRatio: "21 / 9", borderRadius: 4, backgroundImage: `url(${a.image}), url(/renders/living.webp)`, backgroundSize: "cover", backgroundPosition: "center" }}
-            role="img"
-            aria-label=""
+            aria-hidden="true"
           />
         </div>
         <div className="section">

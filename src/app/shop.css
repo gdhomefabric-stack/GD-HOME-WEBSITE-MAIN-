@@ -459,7 +459,7 @@
 }
 .consult-steps__n {
   font-size: 1.8rem;
-  color: var(--gold);
+  color: var(--gold-num);
   line-height: 1;
 }
 .consult-steps strong {
