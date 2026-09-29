@@ -78,9 +78,11 @@ npm run assets:renders -- http://localhost:3000   # re-render public/renders/* f
 
 ## Deployment (GitHub Pages)
 
-`.github/workflows/deploy.yml` type-checks and builds every push and pull request. On `main` it publishes `out/` to GitHub Pages; `public/CNAME` keeps the custom domain.
+`.github/workflows/deploy.yml` type-checks and builds every push and pull request. On `main` it publishes `out/` to GitHub Pages.
 
-**One-time setup:** in the repository settings, go to **Pages** and set **Source** to **GitHub Actions**.
+The root `CNAME` file sets the custom domain while Pages publishes from a branch; do not delete it, or the site drops off gdhomefabric.in. The workflow waits for GitHub's own branch build to finish, then deploys the villa over it.
+
+**Recommended:** in the repository settings, go to **Pages**, set **Source** to **GitHub Actions**, and check that **Custom domain** reads `gdhomefabric.in` with **Enforce HTTPS** ticked. The branch build then stops running.
 
 ## Editing content
 

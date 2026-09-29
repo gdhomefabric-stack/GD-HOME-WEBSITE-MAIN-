@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -45,6 +46,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # While Pages is set to "Deploy from a branch", GitHub also publishes the raw
+      # repository on every push. Deploy after that build so the villa stays live.
+      - name: Wait for the branch build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for _ in $(seq 60); do
+            pending=$(gh api "repos/${{ github.repository }}/actions/runs?head_sha=${{ github.sha }}" \
+              --jq '[.workflow_runs[] | select(.name == "pages build and deployment" and .status != "completed")] | length') \
+              || { echo "::warning::Could not check the branch build"; exit 0; }
+            [ "$pending" = "0" ] && exit 0
+            sleep 10
+          done
+          echo "::warning::The branch build was still running after 10 minutes"
       - uses: actions/configure-pages@v5
       - id: deployment
         uses: actions/deploy-pages@v4
