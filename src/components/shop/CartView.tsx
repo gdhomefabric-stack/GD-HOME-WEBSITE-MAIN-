@@ -71,7 +71,7 @@ export function CartView() {
             <p className="serif">Your cart is empty.</p>
             <p className="muted">Dress a window in the villa or browse the collections — everything you add appears here.</p>
             <div className="page-hero__actions">
-              <Link className="btn" href="/">
+              <Link className="btn" href="/villa/">
                 Explore the villa
               </Link>
               <Link className="btn btn--outline" href="/collections/">

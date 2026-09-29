@@ -280,70 +280,49 @@ export interface CameraView {
   target: Vec3;
 }
 
-export const OVERVIEW_VIEW: CameraView = {
-  position: [11.5, 27, 30],
-  target: [0, 0, 0.6],
-};
+/** Eye height of the tour camera (a standing adult). */
+export const EYE = 1.55;
 
-export const INTRO_VIEW: CameraView = {
-  position: [34, 42, 58],
-  target: [0, 0, 0],
-};
-
-/** Camera view looking across a room towards its windows. */
+/** Where you stand when you walk into a room: a corner, looking across to the windows. */
 export function roomView(room: RoomSpec): CameraView {
-  if (room.view) return room.view;
-  const c = roomCenter(room);
-  const wins = windowsForRoom(room.id);
-  const f = room.row;
-  const inward = facadeInward(f);
-  const wz = facadeInnerZ(f);
-  const tx = wins.reduce((s, w) => s + w.x, 0) / wins.length;
-  const backZ = f === "N" ? room.bounds[3] : room.bounds[1];
-  const camZ = backZ - inward * 0.9; // 0.9 m in front of the back wall
-  const camX = c.x + (tx - c.x) * 0.35;
-  return {
-    position: [camX, 1.75, camZ],
-    target: [tx, 1.35, wz + inward * 0.2],
-  };
+  const [px, , pz] = room.view.position;
+  const [tx, , tz] = room.view.target;
+  return { position: [px, EYE, pz], target: [tx, 1.3, tz] };
 }
 
-/** Camera view framing a single window and its curtains. */
+/** Standing back from a window to see the whole dressing, rod to hem. */
 export function windowView(w: WindowSpec): CameraView {
   const inward = facadeInward(w.facade);
   const wz = facadeInnerZ(w.facade);
   const room = ROOM_BY_ID[w.roomId];
   const c = roomCenter(room);
   const side = Math.sign(c.x - w.x) || 1;
-  const dist = Math.max(3.7, w.width * 1.3);
-  const midY = (ROD_HEIGHT + 0.2) / 2 + 0.1;
+  // far enough back to see rod to hem, but inside the room
+  const depth = room.bounds[3] - room.bounds[1] - 0.8;
+  const dist = Math.min(depth, Math.max(3.7, w.width * 1.4));
   return {
-    position: [w.x + side * 0.75, 1.7, wz + inward * dist],
-    target: [w.x, midY, wz],
+    position: [w.x + side * 0.5, 1.5, wz + inward * dist],
+    target: [w.x, (ROD_HEIGHT + 0.2) / 2 + 0.05, wz],
   };
 }
 
-/** Close-up on the left panel's fabric. */
+/** Close enough to the left panel to see the weave. */
 export function closeupView(w: WindowSpec): CameraView {
   const inward = facadeInward(w.facade);
   const wz = facadeInnerZ(w.facade);
-  const px = w.x - w.width / 2 - 0.05;
+  const px = w.x - (w.width + 0.5) / 2 + 0.2;
   return {
-    position: [px + 0.55, 1.5, wz + inward * 1.05],
-    target: [px, 1.45, wz + inward * 0.12],
+    position: [px + 0.5, 1.45, wz + inward * 1.0],
+    target: [px, 1.38, wz + inward * 0.15],
   };
 }
 
-/** View of a bed for dressing it with pillows. */
+/** From beside the foot of the bed, looking at the pillows against the headboard. */
 export function bedView(b: BedSpec): CameraView {
   const px = -b.dirZ;
   const pz = b.dirX;
   return {
-    position: [
-      b.headX + b.dirX * 3.2 + px * 1.3,
-      1.85,
-      b.headZ + b.dirZ * 3.2 + pz * 1.3,
-    ],
-    target: [b.headX + b.dirX * 0.35, b.mattressTop + 0.15, b.headZ + b.dirZ * 0.35],
+    position: [b.headX + b.dirX * 2.9 + px * 1.05, EYE - 0.05, b.headZ + b.dirZ * 2.9 + pz * 1.05],
+    target: [b.headX + b.dirX * 0.4, b.mattressTop + 0.2, b.headZ + b.dirZ * 0.4],
   };
 }

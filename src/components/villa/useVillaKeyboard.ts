@@ -23,14 +23,13 @@ export function useVillaKeyboard(onHelp: () => void) {
       if (!s.introDone) return;
       switch (e.key) {
         case "Escape":
-          if (s.mode !== "overview") {
-            s.back();
-            e.preventDefault();
-          }
+          if (s.planOpen) s.closePlan();
+          else s.back();
+          e.preventDefault();
           break;
         case "ArrowRight":
         case "ArrowLeft":
-          if (s.mode === "overview" || s.mode === "room") {
+          if (s.mode === "room") {
             s.cycleRoom(e.key === "ArrowRight" ? 1 : -1);
             e.preventDefault();
           }
@@ -52,6 +51,11 @@ export function useVillaKeyboard(onHelp: () => void) {
         }
         case "?":
           onHelp();
+          break;
+        case "p":
+        case "P":
+          if (s.planOpen) s.closePlan();
+          else s.openPlan();
           break;
         default:
           if (/^[1-8]$/.test(e.key)) {

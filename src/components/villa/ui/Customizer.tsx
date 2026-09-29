@@ -70,7 +70,7 @@ export function Customizer({ variant = "3d" }: { variant?: "3d" | "2d" }) {
             Dress this window
           </h2>
         </div>
-        <button type="button" className="icon-btn" onClick={() => s.goOverview()} aria-label="Close and return to the villa overview">
+        <button type="button" className="icon-btn" onClick={() => s.enterRoom(s.roomId)} aria-label="Close and step back into the room">
           <CloseIcon />
         </button>
       </div>

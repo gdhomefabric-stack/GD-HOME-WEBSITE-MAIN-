@@ -12,7 +12,7 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
             <button type="button" onClick={reset} style={{ padding: "12px 22px", borderRadius: 999, border: 0, background: "#8c6a2f", color: "#fff", cursor: "pointer" }}>
               Try again
             </button>{" "}
-            <a href="/?mode=gallery" style={{ color: "#5e4a2e", marginLeft: 12 }}>
+            <a href="/villa/?mode=gallery" style={{ color: "#5e4a2e", marginLeft: 12 }}>
               Room gallery
             </a>{" "}
             <a href="/collections/" style={{ color: "#5e4a2e", marginLeft: 12 }}>

@@ -16,7 +16,7 @@ import {
 } from "@/data/catalog";
 import { BED_BY_ROOM, ROOMS, ROOM_BY_ID, WINDOWS, WINDOW_BY_ID, windowsForRoom, type RoomId } from "@/data/villa";
 
-export type Mode = "overview" | "room" | "window" | "closeup" | "bed";
+export type Mode = "room" | "window" | "closeup" | "bed";
 export type Lighting = "day" | "sunset" | "night";
 export type Quality = "high" | "lite" | "static";
 export type QualityPref = "auto" | Quality;
@@ -58,7 +58,11 @@ function initialOpen(): Record<string, number> {
 
 interface VillaState {
   mode: Mode;
-  roomId: RoomId | null;
+  roomId: RoomId;
+  /** the room whose lit scene is on screen (lags roomId while the next room streams in) */
+  roomShown: RoomId | null;
+  /** the floor plan overlay */
+  planOpen: boolean;
   windowId: string | null;
   lighting: Lighting;
   quality: Quality | null;
@@ -83,7 +87,9 @@ interface VillaState {
   /** why the 3D experience gave way to the room gallery, if it did */
   fallbackReason: string | null;
 
-  goOverview: () => void;
+  openPlan: () => void;
+  closePlan: () => void;
+  setRoomShown: (id: RoomId) => void;
   enterRoom: (id: RoomId) => void;
   selectWindow: (id: string) => void;
   closeup: () => void;
@@ -118,8 +124,10 @@ interface VillaState {
 const LIGHT_NAMES: Record<Lighting, string> = { day: "Daylight", sunset: "Sunset", night: "Night" };
 
 export const useVilla = create<VillaState>()((set, get) => ({
-  mode: "overview",
-  roomId: null,
+  mode: "room",
+  roomId: "living",
+  roomShown: null,
+  planOpen: false,
   windowId: null,
   lighting: "day",
   quality: null,
@@ -142,13 +150,15 @@ export const useVilla = create<VillaState>()((set, get) => ({
   loadProgress: 0,
   fallbackReason: null,
 
-  goOverview: () => {
-    set({ mode: "overview", roomId: null, windowId: null, panel: "curtains" });
-    get().announce("Villa overview. Choose a room to enter.");
+  openPlan: () => {
+    set({ planOpen: true });
+    get().announce("Floor plan. Choose a room to walk into.");
   },
+  closePlan: () => set({ planOpen: false }),
+  setRoomShown: (id) => set({ roomShown: id }),
   enterRoom: (id) => {
     const room = ROOM_BY_ID[id];
-    set({ mode: "room", roomId: id, windowId: null, panel: "curtains", hoverRoom: null });
+    set({ mode: "room", roomId: id, windowId: null, panel: "curtains", hoverRoom: null, planOpen: false });
     const n = windowsForRoom(id).length;
     get().announce(`${room.name}. ${room.tagline}. ${n} window${n > 1 ? "s" : ""} to dress.`);
   },
@@ -172,11 +182,11 @@ export const useVilla = create<VillaState>()((set, get) => ({
     const { mode, roomId } = get();
     if (mode === "closeup") set({ mode: "window" });
     else if ((mode === "window" || mode === "bed") && roomId) get().enterRoom(roomId);
-    else if (mode === "room") get().goOverview();
+    else if (mode === "room") get().openPlan();
   },
   cycleRoom: (dir) => {
     const { roomId } = get();
-    const idx = roomId ? ROOMS.findIndex((r) => r.id === roomId) : dir === 1 ? -1 : 0;
+    const idx = ROOMS.findIndex((r) => r.id === roomId);
     const next = ROOMS[(idx + dir + ROOMS.length) % ROOMS.length];
     get().enterRoom(next.id);
   },
@@ -229,7 +239,7 @@ export const useVilla = create<VillaState>()((set, get) => ({
   setLowFps: (v) => set({ lowFps: v }),
   setLoadProgress: (v) => set((s) => (v > s.loadProgress ? { loadProgress: v } : s)),
   fallBack: (reason) =>
-    set({ quality: "static", fallbackReason: reason, mode: "overview", roomId: null, windowId: null, flying: false }),
+    set({ quality: "static", fallbackReason: reason, mode: "room", windowId: null, flying: false, planOpen: true }),
   announce: (msg) => set({ announcement: msg }),
 }));
 

@@ -6,3 +6,4 @@ next-env.d.ts
 .DS_Store
 /scripts/.cache/
 public/basis/
+__pycache__/

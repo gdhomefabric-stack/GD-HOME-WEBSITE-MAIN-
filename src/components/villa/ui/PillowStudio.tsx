@@ -51,7 +51,7 @@ export function PillowStudio() {
             {PILLOW_COLLECTION.name}
           </h2>
         </div>
-        <button type="button" className="icon-btn" onClick={() => s.goOverview()} aria-label="Close and return to the villa overview">
+        <button type="button" className="icon-btn" onClick={() => s.enterRoom(s.roomId)} aria-label="Close and step back into the room">
           <CloseIcon />
         </button>
       </div>

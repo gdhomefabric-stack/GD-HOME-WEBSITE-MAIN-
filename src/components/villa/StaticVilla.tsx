@@ -26,8 +26,10 @@ export function StaticVilla({ canUse3D }: { canUse3D: boolean }) {
   const open = useVilla((s) => (s.windowId ? s.open[s.windowId] : 1));
   const pillows = useVilla((s) => (s.roomId ? s.pillows[s.roomId] : undefined));
   const fallbackReason = useVilla((s) => s.fallbackReason);
+  const planOpen = useVilla((s) => s.planOpen);
   const s = useVilla.getState();
-  const room = roomId ? ROOM_BY_ID[roomId] : null;
+  // the gallery opens on the list of rooms (the "floor plan")
+  const room = planOpen ? null : ROOM_BY_ID[roomId];
 
   return (
     <main id="villa-main" className="gallery page">
@@ -39,7 +41,7 @@ export function StaticVilla({ canUse3D }: { canUse3D: boolean }) {
             every room, fabric and pillow is still here.
           </p>
           <div className="fallback-note__actions">
-            <a className="btn btn--sm btn--outline" href="/?mode=lite">
+            <a className="btn btn--sm btn--outline" href="/villa/?mode=lite">
               Try 3D again
             </a>
             <details>
@@ -52,7 +54,7 @@ export function StaticVilla({ canUse3D }: { canUse3D: boolean }) {
       {!room ? (
         <>
           <section className="gallery__hero">
-            <div className="gallery__hero-img" style={{ backgroundImage: `url(${ASSETS.render("overview")})` }} role="img" aria-label="The GD Home Fabric villa seen from above, with its eight rooms" />
+            <div className="gallery__hero-img" style={{ backgroundImage: `url(${ASSETS.render("hero")})` }} role="img" aria-label="The villa's living room in evening light, with velvet curtains drawn back" />
             <div className="gallery__hero-copy">
               <p className="eyebrow">GD Home Fabric presents</p>
               <h1 className="display">The Villa</h1>
@@ -61,7 +63,7 @@ export function StaticVilla({ canUse3D }: { canUse3D: boolean }) {
               </p>
               <div className="gallery__hero-actions">
                 {canUse3D && (
-                  <Link className="btn" href="/?mode=3d" onClick={() => s.setQuality("lite")}>
+                  <Link className="btn" href="/villa/?mode=3d" onClick={() => s.setQuality("lite")}>
                     Explore in 3D instead
                   </Link>
                 )}
@@ -96,7 +98,7 @@ export function StaticVilla({ canUse3D }: { canUse3D: boolean }) {
         </>
       ) : (
         <section className="wrap gallery-room" aria-labelledby="gallery-room-title">
-          <button type="button" className="btn btn--ghost btn--sm" onClick={() => s.goOverview()}>
+          <button type="button" className="btn btn--ghost btn--sm" onClick={() => s.openPlan()}>
             <Chevron /> All rooms
           </button>
           <div className="gallery-room__layout">

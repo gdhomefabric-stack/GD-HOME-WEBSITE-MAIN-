@@ -3,49 +3,81 @@
 import { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useProgress } from "@react-three/drei";
-import { WINDOWS } from "@/data/villa";
+import { ROOMS, windowsForRoom, type RoomId } from "@/data/villa";
 import { grabCanvas, registerCapture } from "@/lib/capture";
 import { useVilla, type Quality } from "@/store/villa";
-import { CameraRig } from "./scene/CameraRig";
 import { WindowDressing } from "./scene/Curtain";
 import { useFabricTextures } from "./scene/fabrics";
 import { Interaction } from "./scene/Interaction";
-import { SceneLighting } from "./scene/Lighting";
 import { BedPillows } from "./scene/Pillows";
 import { PostFX } from "./scene/PostFX";
-import { Villa } from "./scene/Villa";
+import { RoomScene, prefetchRoom, useRoomAssets } from "./scene/RoomScene";
+import { TourCamera } from "./scene/TourCamera";
 
-function Dressings() {
+/** Exposure matching the Blender renders (+2 stops). */
+export const EXPOSURE = 4;
+/** How long the veil takes to close before a room swap (keep in sync with villa.css). */
+const VEIL_MS = 380;
+
+function Dressings({ roomId }: { roomId: RoomId }) {
   const tex = useFabricTextures();
+  const { env } = useRoomAssets(roomId);
   return (
     <>
-      {WINDOWS.map((w) => (
-        <WindowDressing key={w.id} win={w} tex={tex} />
+      {windowsForRoom(roomId).map((w) => (
+        <WindowDressing key={w.id} win={w} tex={tex} env={env} />
       ))}
-      <BedPillows tex={tex} />
+      <BedPillows tex={tex} roomId={roomId} env={env} />
     </>
   );
 }
 
-/** Pre-compiles shaders, then tells the UI the villa is ready to reveal. */
-function Ready() {
-  const { gl, scene, camera, invalidate } = useThree();
+/** The room on screen. */
+function RoomStage({ id }: { id: RoomId }) {
   useEffect(() => {
-    let alive = true;
-    const done = () => {
-      if (!alive) return;
-      invalidate();
-      requestAnimationFrame(() => requestAnimationFrame(() => alive && useVilla.getState().setSceneReady()));
-    };
-    const compile = (gl as THREE.WebGLRenderer & { compileAsync?: (s: THREE.Object3D, c: THREE.Camera) => Promise<unknown> }).compileAsync;
-    if (compile) compile.call(gl, scene, camera).then(done, done);
-    else done();
-    return () => {
-      alive = false;
-    };
-  }, [gl, scene, camera, invalidate]);
+    const s = useVilla.getState();
+    if (!s.sceneReady) requestAnimationFrame(() => requestAnimationFrame(() => useVilla.getState().setSceneReady()));
+    // warm the neighbours so walking on feels instant
+    const i = ROOMS.findIndex((r) => r.id === id);
+    prefetchRoom(ROOMS[(i + 1) % ROOMS.length].id);
+    prefetchRoom(ROOMS[(i + ROOMS.length - 1) % ROOMS.length].id);
+  }, [id]);
+  return (
+    <>
+      <RoomScene id={id} />
+      <Dressings roomId={id} />
+      <Interaction roomId={id} />
+    </>
+  );
+}
+
+/** Loads the next room off-screen, then swaps it in once the veil has closed. */
+function NextRoom({ id }: { id: RoomId }) {
+  useRoomAssets(id);
+  useEffect(() => {
+    const t = setTimeout(() => useVilla.getState().setRoomShown(id), useVilla.getState().roomShown ? VEIL_MS : 0);
+    return () => clearTimeout(t);
+  }, [id]);
   return null;
+}
+
+function Stage() {
+  const roomId = useVilla((s) => s.roomId);
+  const shown = useVilla((s) => s.roomShown);
+  return (
+    <>
+      {shown && (
+        <Suspense fallback={null}>
+          <RoomStage id={shown} />
+        </Suspense>
+      )}
+      {roomId !== shown && (
+        <Suspense fallback={null}>
+          <NextRoom id={roomId} />
+        </Suspense>
+      )}
+    </>
+  );
 }
 
 /**
@@ -61,10 +93,22 @@ function InvalidateOnChange() {
 
 /** Reports asset streaming progress to the (DOM) loading screen. */
 function ProgressReporter() {
-  const progress = useProgress((s) => s.progress);
   useEffect(() => {
-    useVilla.getState().setLoadProgress(progress);
-  }, [progress]);
+    const m = THREE.DefaultLoadingManager;
+    let raf = 0;
+    // loaders start inside React's render (useLoader), so report on the next frame, never mid-render
+    const report = (loaded: number, total: number) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => useVilla.getState().setLoadProgress(total ? (loaded / total) * 100 : 100));
+    };
+    m.onProgress = (_url, loaded, total) => report(loaded, total);
+    m.onLoad = () => report(1, 1);
+    return () => {
+      cancelAnimationFrame(raf);
+      m.onProgress = () => {};
+      m.onLoad = () => {};
+    };
+  }, []);
   return null;
 }
 
@@ -138,17 +182,16 @@ export default function VillaCanvas({ quality, onLost }: { quality: Quality; onL
     <Canvas
       className="villa-canvas"
       frameloop="demand"
-      shadows={high}
       dpr={high ? [1, 1.75] : [1, 1.4]}
       gl={{ antialias: !high, powerPreference: "high-performance", alpha: false, stencil: false, depth: true }}
-      camera={{ fov: 38, near: 0.08, far: 420, position: [34, 42, 58] }}
+      camera={{ fov: 54, near: 0.05, far: 400, position: [0, 1.55, 0] }}
       onCreated={(state) => {
         const { gl } = state;
         if (process.env.NODE_ENV !== "production") (window as unknown as { __r3f: unknown }).__r3f = state;
-        gl.toneMapping = THREE.NeutralToneMapping;
+        gl.toneMapping = THREE.AgXToneMapping;
+        gl.toneMappingExposure = EXPOSURE;
         // warm stone, not black, behind the scene while it streams in
         gl.setClearColor("#e9dfcc");
-        gl.toneMappingExposure = 1;
         gl.domElement.addEventListener("webglcontextlost", (e) => {
           e.preventDefault();
           onLost();
@@ -156,14 +199,8 @@ export default function VillaCanvas({ quality, onLost }: { quality: Quality; onL
       }}
       aria-hidden="true"
     >
-      <SceneLighting />
-      <Suspense fallback={null}>
-        <Villa />
-        <Dressings />
-        <Interaction />
-        <Ready />
-      </Suspense>
-      <CameraRig />
+      <Stage />
+      <TourCamera />
       <CaptureBridge post={high} />
       {high && (
         <>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { PageShell } from "@/components/site/PageShell";
 import { ConsultationForm } from "@/components/shop/ConsultationForm";
 
 export const metadata: Metadata = {
@@ -19,12 +18,7 @@ const STEPS = [
 
 export default function ConsultationPage() {
   return (
-    <>
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <SiteHeader />
-      <main id="main" className="page">
+    <PageShell>
         <div className="wrap consult-page">
           <section className="consult-page__intro">
             <p className="eyebrow">Every commission begins with a conversation</p>
@@ -44,14 +38,12 @@ export default function ConsultationPage() {
                 </li>
               ))}
             </ol>
-            <Link className="link-arrow" href="/">
+            <Link className="link-arrow" href="/villa/">
               Explore the villa first
             </Link>
           </section>
           <ConsultationForm />
         </div>
-      </main>
-      <SiteFooter />
-    </>
+    </PageShell>
   );
 }

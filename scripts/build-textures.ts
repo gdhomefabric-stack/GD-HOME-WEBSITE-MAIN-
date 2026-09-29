@@ -4,6 +4,7 @@
  *  - Curtain fabrics  → public/textures/fabric/<kind>-{detail,normal}.ktx2  (GPU-compressed, Basis Universal)
  *                     → public/textures/fabric/<kind>-closeup.webp          (UI fabric loupe)
  *  - Architecture     → scripts/.cache/arch/*.png  (embedded + KTX2-compressed into villa.glb by build-villa.ts)
+ *  - `fabric-png`     → scripts/.cache/fabric/*.png  (the same fabrics for the Blender photographs)
  *
  * Everything is seeded and tileable, so re-running produces the same assets.
  */
@@ -15,6 +16,9 @@ import { rawToKTX2, rawToPNG, rawToWebP, svgToRaw } from "./lib/encode";
 const ROOT = path.resolve(import.meta.dirname, "..");
 const FABRIC_DIR = path.join(ROOT, "public/textures/fabric");
 const ARCH_DIR = path.join(ROOT, "scripts/.cache/arch");
+const FABRIC_PNG_DIR = path.join(ROOT, "scripts/.cache/fabric");
+/** write PNGs for Blender instead of the web textures */
+const PNG_ONLY = process.argv[2] === "fabric-png";
 
 const log = (...a: unknown[]) => console.log("[textures]", ...a);
 
@@ -228,6 +232,12 @@ async function writeFabric(kind: string, f: FabricFields) {
   const { w, h } = f.height;
   const detail = greyRGBA(f.albedo, f.alpha);
   const normal = normalMap(f.height, f.normalStrength);
+  if (PNG_ONLY) {
+    await writeFile(path.join(FABRIC_PNG_DIR, `${kind}-detail.png`), await rawToPNG(detail, w, h));
+    await writeFile(path.join(FABRIC_PNG_DIR, `${kind}-normal.png`), await rawToPNG(normal, w, h));
+    log("fabric png", kind);
+    return;
+  }
   await writeFile(path.join(FABRIC_DIR, `${kind}-detail.ktx2`), await rawToKTX2(detail, w, h, { srgb: true, quality: 200 }));
   await writeFile(
     path.join(FABRIC_DIR, `${kind}-normal.ktx2`),
@@ -462,8 +472,9 @@ async function buildArch() {
 async function main() {
   await mkdir(FABRIC_DIR, { recursive: true });
   await mkdir(ARCH_DIR, { recursive: true });
+  await mkdir(FABRIC_PNG_DIR, { recursive: true });
   const only = process.argv[2];
-  if (!only || only === "fabric") {
+  if (!only || only === "fabric" || PNG_ONLY) {
     await writeFabric("linen", fabricLinen());
     await writeFabric("blackout", fabricBlackout());
     await writeFabric("velvet", fabricVelvet());
@@ -477,6 +488,11 @@ async function main() {
       emb.stitch.data[y * size + x] * 255,
       0,
     ]);
+    if (PNG_ONLY) {
+      await writeFile(path.join(FABRIC_PNG_DIR, "embroidered-mask.png"), await rawToPNG(maskRGBA, size, size));
+      log("done");
+      return;
+    }
     await writeFile(path.join(FABRIC_DIR, "embroidered-mask.ktx2"), await rawToKTX2(maskRGBA, size, size, { srgb: false, quality: 220 }));
     // gilt thread overlay for the UI loupe (alpha = motif)
     const n = normalMap(emb.height, 2.6);

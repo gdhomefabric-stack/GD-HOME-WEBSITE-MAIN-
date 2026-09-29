@@ -11,9 +11,10 @@ import { SiteHeader } from "../site/SiteHeader";
 import { StaticVilla } from "./StaticVilla";
 import { VillaBoundary } from "./VillaBoundary";
 import { Customizer } from "./ui/Customizer";
-import { Journey, LightingToggle, Minimap, OverviewIntro, RoomCards, RoomPanel } from "./ui/Navigation";
+import { Journey, LightingToggle, Minimap, RoomPanel } from "./ui/Navigation";
 import { CompareDialog, HelpDialog, LiveRegion, LoadingScreen, LowFpsNotice, Toasts } from "./ui/Overlays";
 import { PillowStudio } from "./ui/PillowStudio";
+import { PlanOverlay, RoomVeil } from "./ui/Plan";
 import { useVillaKeyboard } from "./useVillaKeyboard";
 
 // The WebGL engine and villa are streamed in after the page shell has painted.
@@ -46,16 +47,20 @@ function useResolveExperience() {
     const s = useVilla.getState();
     const light = params.get("light") as Lighting | null;
     if (light === "day" || light === "sunset" || light === "night") useVilla.setState({ lighting: light });
-    if (params.get("capture")) useVilla.setState({ instant: true });
     s.setQuality(q);
+    // development hook for automated checks
+    if (process.env.NODE_ENV !== "production") (window as unknown as { __villa: typeof useVilla }).__villa = useVilla;
     const room = params.get("room") as RoomId | null;
     if (room && ROOM_BY_ID[room]) useVilla.setState({ mode: "room", roomId: room });
+    // the gallery (no 3D) opens on the list of rooms
+    else if (q === "static") useVilla.setState({ planOpen: true });
   }, []);
   return canUse3D;
 }
 
 function VillaUI() {
   const mode = useVilla((s) => s.mode);
+  const planOpen = useVilla((s) => s.planOpen);
   const introDone = useVilla((s) => s.introDone);
   const [help, setHelp] = useState(false);
   const openHelp = useCallback(() => setHelp(true), []);
@@ -69,12 +74,12 @@ function VillaUI() {
         <LightingToggle />
       </div>
 
-      {mode === "overview" && !narrow && <OverviewIntro />}
-      {mode === "room" && <RoomPanel />}
+      {mode === "room" && !planOpen && <RoomPanel />}
       {(mode === "window" || mode === "closeup") && <Customizer />}
       {mode === "bed" && <PillowStudio />}
 
-      {narrow ? mode === "overview" && <RoomCards /> : <Minimap />}
+      {!narrow && !planOpen && <Minimap />}
+      <PlanOverlay />
 
       <div className="vui__corner">
         <Link href="/collections/" className="btn btn--sm btn--outline vui__skip">
@@ -83,7 +88,7 @@ function VillaUI() {
         <button type="button" className="btn btn--sm btn--ghost" onClick={openHelp} aria-haspopup="dialog">
           <span aria-hidden="true">?</span> <span className="vui__help-label">Controls</span>
         </button>
-        <Link href="/?mode=gallery" className="btn btn--sm btn--ghost vui__gallery" onClick={() => s.setQuality("static")}>
+        <Link href="/villa/?mode=gallery" className="btn btn--sm btn--ghost vui__gallery" onClick={() => s.setQuality("static")}>
           Room gallery
         </Link>
       </div>
@@ -100,10 +105,7 @@ export function VillaExperience() {
   const quality = useVilla((s) => s.quality);
   const canUse3D = useResolveExperience();
   const mode = useVilla((s) => s.mode);
-  const [captureMode, setCaptureMode] = useState(false);
-  useEffect(() => {
-    setCaptureMode(new URLSearchParams(window.location.search).has("capture"));
-  }, []);
+  const roomId = useVilla((s) => s.roomId);
 
   if (quality === "static") {
     return (
@@ -118,7 +120,7 @@ export function VillaExperience() {
   }
 
   return (
-    <div className="villa" data-mode={mode} data-capture={captureMode || undefined}>
+    <div className="villa" data-mode={mode}>
       <a className="skip-link" href="/collections/">
         Skip 3D experience — browse collections
       </a>
@@ -129,7 +131,7 @@ export function VillaExperience() {
           An interactive 3D villa with eight rooms. Every action is also available from the panels, the floor plan and
           the keyboard; press question mark for the controls.
         </p>
-        <div className="villa__poster" style={{ backgroundImage: `url(${ASSETS.render("overview")})` }} aria-hidden="true" />
+        <div className="villa__poster" style={{ backgroundImage: `url(${ASSETS.render(roomId)})` }} aria-hidden="true" />
         {quality && (
           <VillaBoundary onFail={(reason) => useVilla.getState().fallBack(reason)}>
             <VillaCanvas quality={quality} onLost={() => useVilla.getState().fallBack("The graphics context was lost")} />
@@ -137,6 +139,7 @@ export function VillaExperience() {
         )}
       </main>
       <LiveRegion />
+      <RoomVeil />
       {quality && <VillaUI />}
       <LoadingScreen />
     </div>

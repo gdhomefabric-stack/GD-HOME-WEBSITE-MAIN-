@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { PageShell } from "@/components/site/PageShell";
+import { CollectionCard, CtaBand, PillowCard } from "@/components/site/Blocks";
+import { COLLECTIONS } from "@/data/catalog";
 import { CollectionsBrowser } from "@/components/shop/CollectionsBrowser";
 
 export const metadata: Metadata = {
@@ -13,35 +14,44 @@ export const metadata: Metadata = {
 
 export default function CollectionsPage() {
   return (
-    <>
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <SiteHeader />
-      <main id="main" className="page">
+    <PageShell>
         <section className="page-hero">
           <div className="wrap page-hero__inner">
-            <p className="eyebrow">The house catalogue</p>
-            <h1 className="display">Five chapters, told in cloth.</h1>
-            <p className="lead">
+            <p className="eyebrow" data-reveal="fade">
+              The house catalogue
+            </p>
+            <h1 className="display" data-reveal="up">
+              Five chapters, told in cloth.
+            </h1>
+            <p className="lead" data-reveal="up">
               From absolute darkness to the barest veil — every curtain is made to measure, in your colour, heading,
               length and lining. Prefer to see it in a room first?
             </p>
             <div className="page-hero__actions">
-              <Link className="btn" href="/">
+              <Link className="btn" href="/villa/">
                 Explore the villa in 3D
               </Link>
-              <Link className="btn btn--outline" href="/?mode=gallery">
+              <Link className="btn btn--outline" href="/villa/?mode=gallery">
                 Room gallery
               </Link>
             </div>
           </div>
         </section>
+        <section className="section section--tight">
+          <div className="inner grid-3">
+            {COLLECTIONS.map((c, i) => (
+              <CollectionCard key={c.id} id={c.id} i={i % 3} />
+            ))}
+            <PillowCard i={2} />
+          </div>
+        </section>
         <div className="wrap">
+          <p className="eyebrow" style={{ marginBottom: "1rem" }}>
+            Shop every fabric
+          </p>
           <CollectionsBrowser />
         </div>
-      </main>
-      <SiteFooter />
-    </>
+        <CtaBand />
+    </PageShell>
   );
 }

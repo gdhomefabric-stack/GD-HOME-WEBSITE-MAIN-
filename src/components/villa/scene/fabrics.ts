@@ -44,6 +44,8 @@ export function useFabricTextures(): FabricTextures {
       for (const t of [detail, normal]) {
         t.wrapS = t.wrapT = THREE.RepeatWrapping;
         t.repeat.set(1 / TILE[k], 1 / TILE[k]);
+        // velvet's crushed pile runs down the drop, not across it
+        if (k === "velvet") t.rotation = Math.PI / 2;
         t.anisotropy = aniso;
         t.needsUpdate = true;
       }
@@ -149,4 +151,4 @@ export function createLiningMaterial(hex: string): THREE.MeshStandardMaterial {
 }
 
 /** The detail maps multiply the base colour; lift it so swatches read true. */
-export const COLOUR_LIFT = 1.1;
+export const COLOUR_LIFT = 1.0;

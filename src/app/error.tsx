@@ -18,7 +18,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
           <button type="button" className="btn" onClick={reset}>
             Try again
           </button>
-          <Link className="btn btn--outline" href="/?mode=gallery">
+          <Link className="btn btn--outline" href="/villa/?mode=gallery">
             Room gallery
           </Link>
           <Link className="btn btn--outline" href="/collections/">

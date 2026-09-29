@@ -35,9 +35,9 @@ export function Journey() {
   const windowId = useVilla((s) => s.windowId);
   const productId = useVilla((s) => (s.windowId ? s.curtains[s.windowId].productId : null));
   const s = useVilla.getState();
-  const current = mode === "overview" ? 0 : mode === "room" ? 1 : mode === "bed" ? 3 : 3;
-  const crumbs: { label: string; onClick?: () => void }[] = [{ label: "The Villa", onClick: mode !== "overview" ? () => s.goOverview() : undefined }];
-  if (roomId) crumbs.push({ label: ROOM_BY_ID[roomId].name, onClick: mode !== "room" ? () => s.enterRoom(roomId) : undefined });
+  const current = mode === "room" ? 1 : 3;
+  const crumbs: { label: string; onClick?: () => void }[] = [{ label: "The Villa", onClick: () => s.openPlan() }];
+  crumbs.push({ label: ROOM_BY_ID[roomId].name, onClick: mode !== "room" ? () => s.enterRoom(roomId) : undefined });
   if (windowId && (mode === "window" || mode === "closeup")) {
     const w = WINDOW_BY_ID[windowId];
     const idx = windowsForRoom(w.roomId).findIndex((x) => x.id === windowId);
@@ -206,23 +206,9 @@ export function RoomPanel() {
           </button>
         )}
       </div>
-      <button type="button" className="btn btn--ghost btn--sm room-panel__back" onClick={() => s.goOverview()}>
-        <Chevron /> Back to the villa
+      <button type="button" className="btn btn--ghost btn--sm room-panel__back" onClick={() => s.openPlan()}>
+        <Chevron /> Floor plan · all rooms
       </button>
-    </section>
-  );
-}
-
-export function OverviewIntro() {
-  return (
-    <section className="panel overview-intro" aria-labelledby="overview-title">
-      <p className="eyebrow">GD Home Fabric presents</p>
-      <h2 id="overview-title">The Villa</h2>
-      <p>
-        Eight rooms in travertine and walnut, each dressed in the collection it suits best. Choose a room — then a window,
-        a fabric, and make it your own.
-      </p>
-      <p className="overview-intro__hint">Drag to turn the villa · scroll or pinch to zoom · or use the floor plan.</p>
     </section>
   );
 }

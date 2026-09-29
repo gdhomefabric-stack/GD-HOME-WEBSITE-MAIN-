@@ -1,0 +1,721 @@
+{
+ "wall_warm": {
+  "tex": "plaster",
+  "color": "#eee6da",
+  "rough": 0.9,
+  "tile": 2.0,
+  "normal": 0.15,
+  "roughMean": 0.8598
+ },
+ "wall_mist": {
+  "tex": "plaster",
+  "color": "#dfe6e3",
+  "rough": 0.9,
+  "tile": 2.0,
+  "normal": 0.15,
+  "roughMean": 0.8598
+ },
+ "wall_blush": {
+  "tex": "plaster",
+  "color": "#f0ddd3",
+  "rough": 0.9,
+  "tile": 2.0,
+  "normal": 0.15,
+  "roughMean": 0.8598
+ },
+ "wall_greige": {
+  "tex": "plaster",
+  "color": "#dcd3c6",
+  "rough": 0.9,
+  "tile": 2.0,
+  "normal": 0.15,
+  "roughMean": 0.8598
+ },
+ "wall_taupe": {
+  "tex": "plaster",
+  "color": "#cbbba7",
+  "rough": 0.9,
+  "tile": 2.0,
+  "normal": 0.15,
+  "roughMean": 0.8598
+ },
+ "wall_green": {
+  "tex": "plaster",
+  "color": "#4d5a45",
+  "rough": 0.9,
+  "tile": 2.0,
+  "normal": 0.15,
+  "roughMean": 0.8598
+ },
+ "wall_dark": {
+  "tex": "plaster",
+  "color": "#3a302a",
+  "rough": 0.9,
+  "tile": 2.0,
+  "normal": 0.15,
+  "roughMean": 0.8598
+ },
+ "ceiling": {
+  "color": "#f4f0e9",
+  "rough": 0.95
+ },
+ "trim": {
+  "color": "#f2ede4",
+  "rough": 0.42
+ },
+ "trim_green": {
+  "color": "#445040",
+  "rough": 0.42
+ },
+ "trim_dark": {
+  "color": "#2c2621",
+  "rough": 0.42
+ },
+ "floor_oak": {
+  "tex": "oak_planks",
+  "rough": 0.42,
+  "tile": 2.4,
+  "normal": 0.8,
+  "roughMean": 0.4224
+ },
+ "floor_walnut": {
+  "tex": "walnut_planks",
+  "rough": 0.36,
+  "tile": 2.4,
+  "normal": 0.8,
+  "roughMean": 0.3568
+ },
+ "floor_smoked": {
+  "tex": "smoked_planks",
+  "rough": 0.4,
+  "tile": 2.4,
+  "normal": 0.8,
+  "roughMean": 0.4231
+ },
+ "floor_travertine": {
+  "tex": "travertine_tiles",
+  "rough": 0.42,
+  "tile": 2.4,
+  "normal": 0.6,
+  "roughMean": 0.4563
+ },
+ "carpet_theatre": {
+  "tex": "carpet",
+  "color": "#4a3630",
+  "rough": 1.0,
+  "tile": 0.7,
+  "normal": 0.7,
+  "roughMean": 0.9804
+ },
+ "window_frame": {
+  "tex": "brushed",
+  "color": "#2e2b28",
+  "rough": 0.42,
+  "metal": 0.65,
+  "tile": 0.5,
+  "normal": 0.2,
+  "roughMean": 0.3
+ },
+ "glass": {
+  "color": "#eef3f2",
+  "rough": 0.02,
+  "glass": true
+ },
+ "sill": {
+  "tex": "travertine",
+  "rough": 0.45,
+  "tile": 1.4,
+  "normal": 0.5,
+  "roughMean": 0.4523
+ },
+ "walnut": {
+  "tex": "walnut",
+  "rough": 0.4,
+  "tile": 1.2,
+  "normal": 0.5,
+  "roughMean": 0.4274
+ },
+ "oak": {
+  "tex": "oak",
+  "rough": 0.45,
+  "tile": 1.2,
+  "normal": 0.5,
+  "roughMean": 0.4274
+ },
+ "white_wood": {
+  "color": "#f0ebe2",
+  "rough": 0.5
+ },
+ "brass": {
+  "tex": "brushed",
+  "color": "#caa46c",
+  "rough": 0.28,
+  "metal": 1.0,
+  "tile": 0.4,
+  "normal": 0.25,
+  "roughMean": 0.3
+ },
+ "bronze": {
+  "tex": "brushed",
+  "color": "#6f5339",
+  "rough": 0.36,
+  "metal": 1.0,
+  "tile": 0.4,
+  "normal": 0.25,
+  "roughMean": 0.3
+ },
+ "black_metal": {
+  "tex": "brushed",
+  "color": "#262422",
+  "rough": 0.4,
+  "metal": 0.7,
+  "tile": 0.4,
+  "normal": 0.2,
+  "roughMean": 0.3
+ },
+ "chrome": {
+  "color": "#e6e6e6",
+  "rough": 0.08,
+  "metal": 1.0
+ },
+ "mirror": {
+  "color": "#f0efec",
+  "rough": 0.02,
+  "metal": 1.0
+ },
+ "marble": {
+  "tex": "marble",
+  "rough": 0.14,
+  "tile": 1.2,
+  "normal": 0.3,
+  "roughMean": 0.1465
+ },
+ "travertine": {
+  "tex": "travertine",
+  "rough": 0.48,
+  "tile": 1.4,
+  "normal": 0.5,
+  "roughMean": 0.4523
+ },
+ "stone_pot": {
+  "tex": "travertine",
+  "color": "#ece5d9",
+  "rough": 0.7,
+  "tile": 0.7,
+  "normal": 0.6,
+  "roughMean": 0.4523
+ },
+ "ceramic_white": {
+  "tex": "ceramic",
+  "color": "#f1ece3",
+  "rough": 0.3,
+  "tile": 0.3,
+  "roughMean": 0.3236
+ },
+ "ceramic_sage": {
+  "tex": "ceramic",
+  "color": "#9fa98f",
+  "rough": 0.35,
+  "tile": 0.3,
+  "roughMean": 0.3236
+ },
+ "ceramic_dark": {
+  "tex": "ceramic",
+  "color": "#3a3530",
+  "rough": 0.32,
+  "tile": 0.3,
+  "roughMean": 0.3236
+ },
+ "ceramic_blush": {
+  "tex": "ceramic",
+  "color": "#e3c4b6",
+  "rough": 0.35,
+  "tile": 0.3,
+  "roughMean": 0.3236
+ },
+ "terracotta": {
+  "tex": "terracotta",
+  "rough": 0.85,
+  "tile": 0.5,
+  "roughMean": 0.851
+ },
+ "soot": {
+  "color": "#1b1816",
+  "rough": 0.95
+ },
+ "boucle": {
+  "tex": "boucle",
+  "color": "#efe8dc",
+  "rough": 0.96,
+  "tile": 0.22,
+  "normal": 0.8,
+  "roughMean": 0.941
+ },
+ "linen_sand": {
+  "tex": "linen",
+  "color": "#cbb99e",
+  "rough": 0.9,
+  "tile": 0.16,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "linen_stone": {
+  "tex": "linen",
+  "color": "#b5a791",
+  "rough": 0.9,
+  "tile": 0.16,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "linen_oat": {
+  "tex": "linen",
+  "color": "#e3d8c6",
+  "rough": 0.9,
+  "tile": 0.16,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "linen_sea": {
+  "tex": "linen",
+  "color": "#a8bbc1",
+  "rough": 0.9,
+  "tile": 0.16,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "linen_white": {
+  "tex": "linen",
+  "color": "#f2eee6",
+  "rough": 0.9,
+  "tile": 0.16,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "linen_charcoal": {
+  "tex": "linen",
+  "color": "#4a4541",
+  "rough": 0.9,
+  "tile": 0.16,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "velvet_taupe": {
+  "tex": "velvet",
+  "color": "#8a7a68",
+  "rough": 0.75,
+  "tile": 0.35,
+  "normal": 0.4,
+  "sheen": {
+   "color": "#dccbb6",
+   "rough": 0.35
+  },
+  "roughMean": 0.72
+ },
+ "velvet_emerald": {
+  "tex": "velvet",
+  "color": "#1d4635",
+  "rough": 0.75,
+  "tile": 0.35,
+  "normal": 0.4,
+  "sheen": {
+   "color": "#7db596",
+   "rough": 0.35
+  },
+  "roughMean": 0.72
+ },
+ "velvet_oxblood": {
+  "tex": "velvet",
+  "color": "#4a1b22",
+  "rough": 0.75,
+  "tile": 0.35,
+  "normal": 0.4,
+  "sheen": {
+   "color": "#bb6d75",
+   "rough": 0.35
+  },
+  "roughMean": 0.72
+ },
+ "velvet_cognac": {
+  "tex": "velvet",
+  "color": "#8a5433",
+  "rough": 0.75,
+  "tile": 0.35,
+  "normal": 0.4,
+  "sheen": {
+   "color": "#efb88d",
+   "rough": 0.35
+  },
+  "roughMean": 0.72
+ },
+ "velvet_moss": {
+  "tex": "velvet",
+  "color": "#4e583d",
+  "rough": 0.75,
+  "tile": 0.35,
+  "normal": 0.4,
+  "sheen": {
+   "color": "#b6c197",
+   "rough": 0.35
+  },
+  "roughMean": 0.72
+ },
+ "velvet_navy": {
+  "tex": "velvet",
+  "color": "#1f2940",
+  "rough": 0.75,
+  "tile": 0.35,
+  "normal": 0.4,
+  "sheen": {
+   "color": "#7c8db6",
+   "rough": 0.35
+  },
+  "roughMean": 0.72
+ },
+ "velvet_blush": {
+  "tex": "velvet",
+  "color": "#caa093",
+  "rough": 0.75,
+  "tile": 0.35,
+  "normal": 0.4,
+  "sheen": {
+   "color": "#f3d6cb",
+   "rough": 0.35
+  },
+  "roughMean": 0.72
+ },
+ "leather_cognac": {
+  "tex": "leather",
+  "color": "#7b4a2a",
+  "rough": 0.5,
+  "tile": 0.3,
+  "normal": 0.6,
+  "roughMean": 0.5139
+ },
+ "leather_black": {
+  "tex": "leather",
+  "color": "#2a2522",
+  "rough": 0.45,
+  "tile": 0.3,
+  "normal": 0.6,
+  "roughMean": 0.5139
+ },
+ "rattan": {
+  "tex": "rattan",
+  "rough": 0.6,
+  "tile": 0.14,
+  "normal": 0.8,
+  "roughMean": 0.7207
+ },
+ "cane_frame": {
+  "tex": "oak",
+  "color": "#d6b07c",
+  "rough": 0.5,
+  "tile": 0.8,
+  "normal": 0.4,
+  "roughMean": 0.4274
+ },
+ "percale_white": {
+  "tex": "percale",
+  "color": "#f6f3ee",
+  "rough": 0.9,
+  "tile": 0.1,
+  "normal": 0.5,
+  "roughMean": 0.902
+ },
+ "throw_taupe": {
+  "tex": "linen",
+  "color": "#9a8670",
+  "rough": 0.9,
+  "tile": 0.2,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "throw_sea": {
+  "tex": "linen",
+  "color": "#9fb3ba",
+  "rough": 0.9,
+  "tile": 0.2,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "throw_oat": {
+  "tex": "linen",
+  "color": "#d9ccb6",
+  "rough": 0.9,
+  "tile": 0.2,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "throw_blush": {
+  "tex": "linen",
+  "color": "#e2c3b8",
+  "rough": 0.9,
+  "tile": 0.2,
+  "normal": 0.6,
+  "roughMean": 0.9077
+ },
+ "rug_ivory": {
+  "tex": "carpet",
+  "color": "#e2d7c4",
+  "rough": 1.0,
+  "tile": 0.5,
+  "normal": 0.7,
+  "roughMean": 0.9804
+ },
+ "rug_sand": {
+  "tex": "carpet",
+  "color": "#cbb79a",
+  "rough": 1.0,
+  "tile": 0.5,
+  "normal": 0.7,
+  "roughMean": 0.9804
+ },
+ "rug_pastel": {
+  "tex": "carpet",
+  "color": "#e8d5c9",
+  "rough": 1.0,
+  "tile": 0.5,
+  "normal": 0.7,
+  "roughMean": 0.9804
+ },
+ "rug_study": {
+  "tex": "carpet",
+  "color": "#6d5a45",
+  "rough": 1.0,
+  "tile": 0.5,
+  "normal": 0.7,
+  "roughMean": 0.9804
+ },
+ "rug_suite": {
+  "tex": "carpet",
+  "color": "#c6b59f",
+  "rough": 1.0,
+  "tile": 0.5,
+  "normal": 0.7,
+  "roughMean": 0.9804
+ },
+ "rug_jute": {
+  "tex": "jute",
+  "rough": 1.0,
+  "tile": 0.5,
+  "normal": 0.9,
+  "roughMean": 0.949
+ },
+ "shade": {
+  "tex": "linen",
+  "color": "#f2e7d4",
+  "rough": 0.9,
+  "tile": 0.15,
+  "normal": 0.4,
+  "emissive": "#ffcf96",
+  "translucent": 0.45,
+  "roughMean": 0.9077
+ },
+ "bulb": {
+  "color": "#fff6e8",
+  "rough": 0.3,
+  "emissive": "#ffdcae"
+ },
+ "fire": {
+  "color": "#ff8a3a",
+  "rough": 1.0,
+  "emissive": "#ff7a2a"
+ },
+ "screen": {
+  "tex": "screen",
+  "rough": 0.9,
+  "uv01": true,
+  "emissive": "#ffffff",
+  "roughMap": false,
+  "tile": 1.0
+ },
+ "book_1": {
+  "color": "#6b3b2e",
+  "rough": 0.7
+ },
+ "book_2": {
+  "color": "#2f4a3f",
+  "rough": 0.7
+ },
+ "book_3": {
+  "color": "#cdbb9d",
+  "rough": 0.7
+ },
+ "book_4": {
+  "color": "#2d3547",
+  "rough": 0.7
+ },
+ "book_5": {
+  "color": "#8c6d4a",
+  "rough": 0.7
+ },
+ "book_6": {
+  "color": "#e9e2d4",
+  "rough": 0.7
+ },
+ "paper": {
+  "color": "#f1ece2",
+  "rough": 0.8
+ },
+ "leaf": {
+  "tex": "leaf",
+  "rough": 0.5,
+  "tile": 0.25,
+  "normal": 0.3,
+  "double": true,
+  "roughMean": 0.549
+ },
+ "olive_leaf": {
+  "tex": "leaf",
+  "color": "#b9c29a",
+  "rough": 0.7,
+  "tile": 0.25,
+  "double": true,
+  "roughMean": 0.549
+ },
+ "bark": {
+  "color": "#5d4d3d",
+  "rough": 0.9
+ },
+ "soil": {
+  "color": "#3a2e25",
+  "rough": 1.0
+ },
+ "water": {
+  "color": "#c9d9d6",
+  "rough": 0.03,
+  "glass": true
+ },
+ "toy_1": {
+  "color": "#e3b7a5",
+  "rough": 0.6
+ },
+ "toy_2": {
+  "color": "#b8c7cf",
+  "rough": 0.6
+ },
+ "toy_3": {
+  "color": "#e9d7a8",
+  "rough": 0.6
+ },
+ "toy_4": {
+  "color": "#b5c3a2",
+  "rough": 0.6
+ },
+ "speaker": {
+  "tex": "linen",
+  "color": "#26231f",
+  "rough": 1.0,
+  "tile": 0.1,
+  "normal": 0.5,
+  "roughMean": 0.9077
+ },
+ "art_1": {
+  "tex": "art_1",
+  "rough": 0.9,
+  "uv01": true,
+  "roughMap": false,
+  "tile": 1.0
+ },
+ "art_2": {
+  "tex": "art_2",
+  "rough": 0.9,
+  "uv01": true,
+  "roughMap": false,
+  "tile": 1.0
+ },
+ "art_3": {
+  "tex": "art_3",
+  "rough": 0.9,
+  "uv01": true,
+  "roughMap": false,
+  "tile": 1.0
+ },
+ "art_4": {
+  "tex": "art_4",
+  "rough": 0.9,
+  "uv01": true,
+  "roughMap": false,
+  "tile": 1.0
+ },
+ "grass": {
+  "tex": "grass",
+  "rough": 1.0,
+  "tile": 3.0,
+  "normal": 0.6,
+  "roughMean": 0.949
+ },
+ "gravel": {
+  "tex": "gravel",
+  "rough": 1.0,
+  "tile": 2.0,
+  "normal": 0.8,
+  "roughMean": 0.902
+ },
+ "hedge": {
+  "tex": "leaf",
+  "color": "#5f7048",
+  "rough": 0.9,
+  "tile": 0.4,
+  "normal": 1.0,
+  "roughMean": 0.549
+ },
+ "facade": {
+  "tex": "plaster",
+  "color": "#f2ebe0",
+  "rough": 0.85,
+  "tile": 2.0,
+  "normal": 0.15,
+  "roughMean": 0.8598
+ },
+ "terrace": {
+  "tex": "travertine_tiles",
+  "rough": 0.6,
+  "tile": 2.4,
+  "normal": 0.6,
+  "roughMean": 0.4563
+ },
+ "pool_tile": {
+  "color": "#9fd0cb",
+  "rough": 0.3
+ },
+ "pool_water": {
+  "color": "#8fc7c8",
+  "rough": 0.02,
+  "glass": true
+ },
+ "tree_leaf": {
+  "tex": "leaf",
+  "color": "#b3bb98",
+  "rough": 0.8,
+  "tile": 0.5,
+  "normal": 1.0,
+  "roughMean": 0.549
+ },
+ "cypress": {
+  "tex": "leaf",
+  "color": "#55624a",
+  "rough": 0.9,
+  "tile": 0.35,
+  "normal": 1.0,
+  "roughMean": 0.549
+ },
+ "cypress_far": {
+  "tex": "leaf",
+  "color": "#6d7a66",
+  "rough": 0.95,
+  "tile": 0.8,
+  "normal": 0.8,
+  "haze": 60,
+  "roughMean": 0.549
+ },
+ "hills": {
+  "tex": "grass",
+  "color": "#9aa38a",
+  "rough": 1.0,
+  "tile": 20.0,
+  "normal": 0.3,
+  "haze": 140,
+  "roughMean": 0.949
+ }
+}

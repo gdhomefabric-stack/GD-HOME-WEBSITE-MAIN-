@@ -3,13 +3,14 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
-import { Bloom, EffectComposer, N8AO, SMAA, ToneMapping, Vignette } from "@react-three/postprocessing";
-import { ToneMappingMode } from "postprocessing";
+import { Bloom, EffectComposer, Noise, SMAA, ToneMapping, Vignette } from "@react-three/postprocessing";
+import { BlendFunction, ToneMappingMode } from "postprocessing";
 
 /**
- * Desktop-only finishing: ambient occlusion grounds the furniture (the sun cannot
- * reach under a ceiling), a restrained bloom lets lamps glow at night, and a
- * neutral tone curve keeps fabric colours true to the swatch.
+ * Desktop finishing, tuned to match the Blender renders: the lighting is already
+ * baked (so no screen-space AO), AgX tone mapping as in Blender, a soft bloom so
+ * bright windows and lamps bleed a little light like a real lens, a light vignette
+ * and a whisper of grain.
  */
 export function PostFX() {
   const gl = useThree((s) => s.gl);
@@ -24,10 +25,10 @@ export function PostFX() {
   }, [gl]);
   return (
     <EffectComposer multisampling={0} frameBufferType={halfFloat ? THREE.HalfFloatType : THREE.UnsignedByteType}>
-      <N8AO halfRes quality="medium" aoRadius={0.9} distanceFalloff={0.55} intensity={2.4} color="#20150c" />
-      <Bloom mipmapBlur intensity={0.32} luminanceThreshold={0.92} luminanceSmoothing={0.25} />
-      <ToneMapping mode={ToneMappingMode.NEUTRAL} />
-      <Vignette offset={0.32} darkness={0.42} />
+      <Bloom mipmapBlur intensity={0.28} luminanceThreshold={0.85} luminanceSmoothing={0.3} radius={0.75} />
+      <ToneMapping mode={ToneMappingMode.AGX} />
+      <Vignette offset={0.38} darkness={0.32} />
+      <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.18} />
       <SMAA />
     </EffectComposer>
   );

@@ -60,7 +60,7 @@ export function LoadingScreen() {
         {slow && !ready && (
           <p className="loader__slow">
             This is taking longer than usual on this connection or device.{" "}
-            <Link href="/?mode=gallery" onClick={() => useVilla.getState().fallBack("Loading took longer than 40 seconds")}>
+            <Link href="/villa/?mode=gallery" onClick={() => useVilla.getState().fallBack("Loading took longer than 40 seconds")}>
               Open the room gallery instead
             </Link>
           </p>
@@ -69,7 +69,7 @@ export function LoadingScreen() {
           <Link href="/collections/" className="link-arrow">
             Skip 3D — browse collections
           </Link>
-          <Link href="/?mode=gallery" className="loader__gallery">
+          <Link href="/villa/?mode=gallery" className="loader__gallery">
             Room gallery (no 3D)
           </Link>
         </div>
@@ -208,7 +208,8 @@ export function HelpDialog({ open, onClose }: { open: boolean; onClose: () => vo
   const rows: [string, string][] = [
     ["← / →", "Previous / next room"],
     ["1 – 8", "Jump to a room"],
-    ["Esc", "Step back (close-up → window → room → villa)"],
+    ["Esc", "Step back (close-up → window → room → floor plan)"],
+    ["P", "Open or close the floor plan"],
     ["O", "Open or close the selected curtains"],
     ["C", "Fabric close-up"],
     ["L", "Cycle Day · Sunset · Night"],
@@ -236,8 +237,9 @@ export function HelpDialog({ open, onClose }: { open: boolean; onClose: () => vo
         ))}
       </dl>
       <p className="dialog__intro">
-        With a mouse: drag to turn, scroll to zoom gently, click a room, a window or the curtains themselves. On touch
-        screens: swipe to turn and pinch to zoom. Every step can also be reached with the panels and the floor plan.
+        With a mouse: drag to look around the room, scroll to zoom gently, and click a window, the curtains or the bed.
+        On touch screens: swipe to look around and pinch to zoom. Every step can also be reached with the panels and the
+        floor plan.
       </p>
     </Dialog>
   );
@@ -257,7 +259,7 @@ export function LowFpsNotice() {
             Use lighter 3D
           </button>
         )}
-        <Link href="/?mode=gallery" className="btn btn--sm btn--outline" onClick={() => useVilla.getState().setQuality("static")}>
+        <Link href="/villa/?mode=gallery" className="btn btn--sm btn--outline" onClick={() => useVilla.getState().setQuality("static")}>
           Room gallery
         </Link>
         <button type="button" className="btn btn--sm btn--ghost" onClick={() => setDismissed(true)}>

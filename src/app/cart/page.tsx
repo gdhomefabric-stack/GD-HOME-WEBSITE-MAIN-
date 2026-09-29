@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { PageShell } from "@/components/site/PageShell";
 import { CartView } from "@/components/shop/CartView";
 
 export const metadata: Metadata = {
@@ -11,17 +10,10 @@ export const metadata: Metadata = {
 
 export default function CartPage() {
   return (
-    <>
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <SiteHeader />
-      <main id="main" className="page">
-        <div className="wrap">
-          <CartView />
-        </div>
-      </main>
-      <SiteFooter />
-    </>
+    <PageShell>
+      <div className="wrap">
+        <CartView />
+      </div>
+    </PageShell>
   );
 }

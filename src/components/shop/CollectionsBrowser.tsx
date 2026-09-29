@@ -2,33 +2,19 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import {
-  COLLECTIONS,
-  PILLOW_COLLECTION,
-  PILLOW_COVERS,
-  PILLOW_FILLS,
-  PILLOW_FIRMNESS,
-  PILLOW_SIZES,
-  describePillow,
-  pillowPrice,
-  productsInCollection,
-  type PillowConfig,
-} from "@/data/catalog";
+import { COLLECTIONS, PILLOW_COLLECTION, productsInCollection } from "@/data/catalog";
 import { ROOMS } from "@/data/villa";
 import { money, priceForSize } from "@/lib/pricing";
-import { addPillowToCart, useToasts } from "@/components/villa/actions";
 import { FabricSwatch } from "@/components/villa/ui/FabricLoupe";
-import { OptionGroup } from "@/components/villa/ui/OptionGroup";
 import { Toasts } from "@/components/villa/ui/Overlays";
 import { CurtainStudio } from "./CurtainStudio";
+import { PillowShop } from "./PillowShop";
 
 /** Room in the villa that best shows a collection. */
 const roomFor = (collection: string) => ROOMS.find((r) => r.featured.includes(collection)) ?? ROOMS[0];
 
 export function CollectionsBrowser() {
   const [studio, setStudio] = useState<string | null>(null);
-  const [pillow, setPillow] = useState<PillowConfig>({ size: "king", fill: "feather-down", firmness: "medium", cover: "white" });
-  const [qty, setQty] = useState(2);
 
   return (
     <>
@@ -54,7 +40,7 @@ export function CollectionsBrowser() {
               <p className="coll__best">
                 <span className="eyebrow">Best for</span> {c.bestFor}
               </p>
-              <Link className="link-arrow" href={`/?room=${room.id}`}>
+              <Link className="link-arrow" href={`/villa/?room=${room.id}`}>
                 See it in the {room.name}
               </Link>
             </header>
@@ -104,77 +90,11 @@ export function CollectionsBrowser() {
             {PILLOW_COLLECTION.name}
           </h2>
           <p className="lead">{PILLOW_COLLECTION.description}</p>
-          <Link className="link-arrow" href="/?room=suite">
+          <Link className="link-arrow" href="/villa/?room=suite">
             Dress a bed in the villa
           </Link>
         </header>
-        <div className="pillow-shop panel">
-          <OptionGroup
-            step={1}
-            legend="Size"
-            layout="chips"
-            value={pillow.size}
-            options={PILLOW_SIZES.map((s) => ({ id: s.id, label: `${s.name} · ${s.dims}` }))}
-            onChange={(v) => setPillow((p) => ({ ...p, size: v }))}
-          />
-          <OptionGroup
-            step={2}
-            legend="Fill"
-            layout="chips"
-            value={pillow.fill}
-            options={PILLOW_FILLS.map((s) => ({ id: s.id, label: s.name }))}
-            onChange={(v) => setPillow((p) => ({ ...p, fill: v }))}
-            hint={PILLOW_FILLS.find((f) => f.id === pillow.fill)?.note}
-          />
-          <OptionGroup
-            step={3}
-            legend="Support"
-            layout="chips"
-            value={pillow.firmness}
-            options={PILLOW_FIRMNESS.map((s) => ({ id: s.id, label: s.name }))}
-            onChange={(v) => setPillow((p) => ({ ...p, firmness: v }))}
-          />
-          <OptionGroup
-            step={4}
-            legend={`Sateen cover — ${PILLOW_COVERS.find((c) => c.id === pillow.cover)?.name}`}
-            layout="swatches"
-            value={pillow.cover}
-            options={PILLOW_COVERS.map((c) => ({ id: c.id, label: c.name }))}
-            onChange={(v) => setPillow((p) => ({ ...p, cover: v }))}
-            render={(o) => (
-              <>
-                <span className="swatch-dot" style={{ background: PILLOW_COVERS.find((c) => c.id === o.id)!.hex }} />
-                <span className="sr-only">{o.label}</span>
-              </>
-            )}
-          />
-          <div className="pillow-shop__buy">
-            <div>
-              <strong className="serif">{describePillow(pillow)}</strong>
-              <span className="muted"> · {money(pillowPrice(pillow))} each</span>
-            </div>
-            <label className="qty">
-              <span className="sr-only">Quantity</span>
-              <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="One fewer">
-                −
-              </button>
-              <input type="number" min={1} max={12} value={qty} onChange={(e) => setQty(Math.max(1, Math.min(12, Number(e.target.value) || 1)))} />
-              <button type="button" onClick={() => setQty((q) => Math.min(12, q + 1))} aria-label="One more">
-                +
-              </button>
-            </label>
-            <button
-              type="button"
-              className="btn"
-              onClick={() => {
-                addPillowToCart(pillow, qty);
-                useToasts.getState().push({ message: `${qty} × ${describePillow(pillow)} added.`, href: "/cart/", linkLabel: "View cart" });
-              }}
-            >
-              Add {qty} to cart · {money(pillowPrice(pillow) * qty)}
-            </button>
-          </div>
-        </div>
+        <PillowShop />
       </section>
 
       {studio && <CurtainStudio productId={studio} onClose={() => setStudio(null)} />}
